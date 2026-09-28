@@ -85,7 +85,7 @@ st.write("---")
 left_panel, right_panel = st.columns(2)
 
 # 2. DATA PIPELINE BACKEND EXTRACTION
-@st.cache_data(ttl=60)
+@st.cache_resource(ttl=60)
 def fetch_market_data():
     nifty_ticker = yf.Ticker("^NSEI")
     df = nifty_ticker.history(period="5d", interval="15m")
