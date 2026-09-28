@@ -10,7 +10,7 @@ st.set_page_config(page_title="AI Nifty Options Pro Engine", layout="wide")
 # Persistent Cloud database simulation using Streamlit's state architecture
 if "user_db" not in st.session_state:
     st.session_state["user_db"] = {
-        "dishant":"dishant911", # Your permanent master Admin Key
+        "admin": "mysecretpassword123",  # Your permanent master Admin Key
         "client1": "paiduser789"          # Sample client credential
     }
 
@@ -194,12 +194,10 @@ with right_panel:
     panel_color = "#2b2b2b"
     ai_reason = "Consolidation phase detected. Technical signals do not guarantee clean entry premium expansion."
     
-    # Missing logic bridging between Part 1 and Part 2
     option_strike = "N/A"
-    current_premium = 100.0  # Proxy base premium
-    premium_sl_points = 20.0  # Default SL points for options
-    premium_target_points = 40.0  # Default Target points
-    allowed_loss = 0.0
+    current_premium = 100.0
+    premium_sl_points = 20.0
+    premium_target_points = 40.0
     
     allowed_loss = capital * (risk_pct / 100.0)
     
@@ -212,12 +210,10 @@ with right_panel:
         panel_color = "#3A331A"
         ai_reason = f"Current time context ({current_time_str}) is marked unsafe for entry. High distribution volatility."
     else:
-        # Check Trend Score from logic
         if trend_score == 1:
             final_signal = "🟢 STRONG BUY (CALL OPTION)"
             panel_color = "#1E4A28"
             ai_reason = "EMA Crossover & Bullish Momentum confirmed. High probability of upward premium expansion."
-            # Round Nifty price to nearest 50 for Strike Price
             atm_strike = round(current_price / 50) * 50
             option_strike = f"NIFTY {atm_strike} CE"
         elif trend_score == -1:
@@ -227,7 +223,6 @@ with right_panel:
             atm_strike = round(current_price / 50) * 50
             option_strike = f"NIFTY {atm_strike} PE"
 
-    # Display Strategy Card
     st.markdown(f"""
     <div style="background-color:{panel_color}; padding:15px; border-radius:10px; border-left:5px solid #00F0FF;">
         <h3 style="margin:0; color:#FFF;">Signal: {final_signal}</h3>
@@ -235,16 +230,19 @@ with right_panel:
     </div>
     """, unsafe_allow_html=True)
     
-    # 5. EXECUTION MATRIX (PART 2)
+    # 5. EXECUTION MATRIX
     if final_signal in ["🟢 STRONG BUY (CALL OPTION)", "🔴 STRONG SELL / BUY PUT (PUT OPTION)"]:
         opt_sl_price = max(0.0, current_premium - premium_sl_points)
         opt_target_price = current_premium + premium_target_points
         nifty_lot_size = 75
         raw_qty = allowed_loss / premium_sl_points
-calculated_lots = int(raw_qty / nifty_lot_size)
-final_qty = calculated_lots * nifty_lot_sizest.write("")
-st.markdown("### 📋 Live Option Trade Setup")
-st.write(f"• Contract Target: {option_strike}")
-st.markdown(f"• Premium Stop-Loss (SL): ₹{opt_sl_price:.2f}", unsafe_allow_html=True)
-st.markdown(f"• Premium Profit Target: ₹{opt_target_price:.2f}", unsafe_allow_html=True)
-st.write(f"• Allocation Strategy: {calculated_lots} Lots ({final_qty} Qty)")# Auto square-off warningif "15:00" <= current_time_str <= "15:30":st.write("")st.markdown("""⚠️ AUTO SQUARE-OFF ALERT: Square off your open options positions before 15:15 to avoid broker penalty charges!""", unsafe_allow_html=True)
+        calculated_lots = int(raw_qty / nifty_lot_size)
+        final_qty = calculated_lots * nifty_lot_size
+
+        st.write("")
+        st.markdown("### 📋 Live Option Trade Setup")
+        st.write(f"• Contract Target: {option_strike}")
+        st.markdown(f"• Premium Stop-Loss (SL): ₹{opt_sl_price:.2f}", unsafe_allow_html=True)
+        st.markdown(f"• Premium Profit Target: ₹{opt_target_price:.2f}", unsafe_allow_html=True)
+        st.write(f"• Allocation Strategy: {calculated_lots} Lots ({final_qty} Qty)")if "15:00" <= current_time_str <= "15:30":
+        st.write("")st.markdown("""⚠️ AUTO SQUARE-OFF ALERT: Square off your open options positions before 15:15 to avoid broker penalty charges!""", unsafe_allow_html=True)
