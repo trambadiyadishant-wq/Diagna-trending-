@@ -340,6 +340,35 @@ with right_panel:
       </script>
     </div>
     """ , unsafe_allow_html=True)
+        # --- 🎙️ DIAGNA GUJARATI VOICE AI ASSISTANT ---
+    st.markdown("<br><h3 style='color: #00F0FF; font-size:18px;'>🎙️ DIAGNA AI વોઈસ આસિસ્ટન્ટ (ગુજરાતી)</h3>", unsafe_allow_html=True)
+    st.write("સવાલ પૂછવા માટે નીચેના માઈક બટન પર ક્લિક કરીને બોલો (દા.ત. 'ડાયગ્ના, માર્કેટ ટ્રેન્ડ શું છે?')")
+
+    from streamlit_mic_recorder import mic_recorder
+    from gtts import gTTS
+    import base64
+
+    # ઓડિયો રેકોર્ડર વિજેટ
+    audio = mic_recorder(start_prompt="🎤 બોલવાનું શરૂ કરો", stop_prompt="🛑 સ્ટોપ કરો", key='diagna_mic')
+
+    if audio:
+        st.info("🔄 DIAGNA AI તમારો અવાજ પ્રોસેસ કરી રહ્યું છે...")
+        
+        # ભવિષ્યમાં અહીં લાઈવ સ્પીચ-ટુ-ટેક્સ્ટ કનેક્ટ થશે, અત્યારે આપણે માર્કેટ ડેટાના આધારે ડાયરેક્ટ રિસ્પોન્સ સેટ કર્યો છે
+        ai_response_text = f"નમસ્તે ડિશંતભાઈ! મેં તમારો અવાજ સાંભળ્યો. અત્યારે નિફ્ટી ૫૦ સ્પોટ પ્રાઈઝ ₹{current_price:.2f} પર ટ્રેડ થઈ રહ્યો છે અને ડાયગ્ના સિસ્ટમ મુજબ માર્કેટનો ટ્રેન્ડ {trend_status} છે. કૃપા કરીને રિસ્ક મેનેજમેન્ટ જોઈને જ ટ્રેડ કરજો."
+        
+        st.success(f"🤖 DIAGNA AI જવાબ: {ai_response_text}")
+        
+        # ગુજરાતીમાં અવાજ (Voice) જનરેટ કરવાની પ્રોસેસ
+        tts = gTTS(text=ai_response_text, lang='gu', slow=False)
+        tts.save("response.mp3")
+        
+        # ઓટોમેટિક ઓડિયો પ્લે કરવાનો જુગાડ
+        with open("response.mp3", "rb") as f:
+            audio_bytes = f.read()
+            audio_base64 = base64.b64encode(audio_bytes).decode()
+            audio_html = f'<audio src="data:audio/mp3;base64,{audio_base64}" autoplay="autoplay">'
+            st.markdown(audio_html, unsafe_allow_html=True)
         
 
     
