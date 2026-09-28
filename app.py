@@ -199,6 +199,7 @@ with right_panel:
     current_premium = 100.0  # Proxy base premium
     premium_sl_points = 20.0  # Default SL points for options
     premium_target_points = 40.0  # Default Target points
+    allowed_loss = 0.0
     
     allowed_loss = capital * (risk_pct / 100.0)
     
