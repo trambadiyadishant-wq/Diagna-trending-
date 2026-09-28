@@ -10,7 +10,7 @@ st.set_page_config(page_title="AI Nifty Options Pro Engine", layout="wide")
 # Persistent Cloud database simulation using Streamlit's state architecture
 if "user_db" not in st.session_state:
     st.session_state["user_db"] = {
-        "admin": "mysecretpassword123",  # Your permanent master Admin Key
+        "dishant": "dishant911",  # Your permanent master Admin Key
         "client1": "paiduser789"          # Sample client credential
     }
 
