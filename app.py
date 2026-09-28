@@ -62,7 +62,7 @@ if not st.session_state["authenticated"]:
             if username in db and db[username] == password:
                 st.session_state["authenticated"] = True
                 st.session_state["current_user"] = username
-                st.query_params["auth_user] = username
+                st.query_params["auth_user"] = username
                 st.rerun()
             else:
                 st.error("❌ Invalid license keys or expired subscription package.")
