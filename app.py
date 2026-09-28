@@ -6,6 +6,28 @@ import datetime
 
 # 1. PAGE SETUP & SECURE DYNAMIC DATABASE
 st.set_page_config(page_title="AI Nifty Options Pro Engine", layout="wide")
+import time
+
+# --- ✨ DIAGNA STARTING ANIMATION SCREEN ---
+if "splash_done" not in st.session_state:
+    splash = st.empty()
+    with splash.container():
+        st.markdown("<br><br><br><br>", unsafe_allow_html=True)
+        st.markdown("""
+        <div style='text-align: center; font-family: sans-serif;'>
+            <h1 style='color: #00F0FF; font-size: 50px; font-weight: 800; letter-spacing: 5px;'>DIAGNA</h1>
+            <p style='color: #888; font-size: 16px; letter-spacing: 3px;'>💎 CREATED BY DISHANT 💎</p>
+            <br>
+            <div style='color: #00F0FF; font-size: 14px;'>⚡ Loading Premium Trading Interface...</div>
+        </div>
+        """, unsafe_allow_html=True)
+        # મોબાઈલ સ્ક્રીન લોડિંગ એનિમેશન
+        progress_bar = st.progress(0)
+        for percent_complete in range(100):
+            time.sleep(0.01)
+            progress_bar.progress(percent_complete + 1)
+    splash.empty()
+    st.session_state["splash_done"] = True
 
 # Persistent Cloud database simulation using Streamlit's state architecture
 if "user_db" not in st.session_state:
@@ -17,6 +39,12 @@ if "user_db" not in st.session_state:
 if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
 if "current_user" not in st.session_state:
+    # ऑटोमैटिक लॉग इन चेक करने के लिए (नया कोड)
+if not st.session_state["authenticated"] and "auth_user" in st.query_params:
+    q_user = st.query_params["auth_user"]
+    if q_user in st.session_state["user_db"]:
+        st.session_state["authenticated"] = True
+        st.session_state["current_user"] = q_user
     st.session_state["current_user"] = None
 
 # Encrypted Login Screen Interface Layout
@@ -34,6 +62,7 @@ if not st.session_state["authenticated"]:
             if username in db and db[username] == password:
                 st.session_state["authenticated"] = True
                 st.session_state["current_user"] = username
+                st.query_params["auth_user] = username
                 st.rerun()
             else:
                 st.error("❌ Invalid license keys or expired subscription package.")
@@ -80,6 +109,16 @@ if st.sidebar.button("Logout / Disconnect Device"):
 
 # ----------------- MAIN CORE MULTI-AGENT ENGINE -----------------
 st.markdown("<h1 style='text-align: center; color: #00F0FF; font-family: sans-serif;'>⚡ AI Nifty & Options Pro Engine</h1>", unsafe_allow_html=True)
+# ----------------- MAIN CORE MULTI-AGENT ENGINE -----------------
+    st.markdown("""
+    <div style='background: linear-gradient(90deg, #0052D4 0%, #4364F7 50%, #6FB1FC 100%); padding: 2px; border-radius: 10px; text-align: center; color: white; margin-bottom: 25px;'>
+        <div style='background: #0E1117; padding: 15px; border-radius: 9px;'>
+            <h2 style='margin:0; color:#00F0FF; font-size:24px; font-family:sans-serif; letter-spacing: 2px;'>⚡ DIAGNA QUANTUM ENGINE ⚡</h2>
+            <p style='margin:5px 0 0 0; color:#888; font-size:12px;'>💎 Premium Institutional System Created by Dishant 💎</p>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    st.write("---")
 st.write("---")
 
 left_panel, right_panel = st.columns(2)
