@@ -4,6 +4,7 @@ import pandas as pd
 from textblob import TextBlob
 import datetime
 import time
+from gtts import gTTS
 
 # 1. PREMIUM PAGE SETUP WITH CUSTOM CSS CANVAS
 st.set_page_config(page_title="DIAGNA | AI Options Engine", page_icon="⚡", layout="wide")
