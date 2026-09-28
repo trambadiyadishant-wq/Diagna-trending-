@@ -352,14 +352,47 @@ with right_panel:
     audio = mic_recorder(start_prompt="🎤 બોલવાનું શરૂ કરો", stop_prompt="🛑 સ્ટોપ કરો", key='diagna_mic')
 
     if audio:
-        st.info("🔄 DIAGNA AI તમારો અવાજ પ્રોસેસ કરી રહ્યું છે...")
+        st.info("🔄 DIAGNA AI તમારા સવાલનું એનાલિસિસ કરી રહ્યું છે...")
         
-        # ભવિષ્યમાં અહીં લાઈવ સ્પીચ-ટુ-ટેક્સ્ટ કનેક્ટ થશે, અત્યારે આપણે માર્કેટ ડેટાના આધારે ડાયરેક્ટ રિસ્પોન્સ સેટ કર્યો છે
-        ai_response_text = f"નમસ્તે ડિશંતભાઈ! મેં તમારો અવાજ સાંભળ્યો. અત્યારે નિફ્ટી ૫૦ સ્પોટ પ્રાઈઝ ₹{current_price:.2f} પર ટ્રેડ થઈ રહ્યો છે અને ડાયગ્ના સિસ્ટમ મુજબ માર્કેટનો ટ્રેન્ડ {trend_status} છે. કૃપા કરીને રિસ્ક મેનેજમેન્ટ જોઈને જ ટ્રેડ કરજો."
+        # ૧. ઓડિયો ફાઈલને પ્રોસેસ કરવા માટેનું સેટઅપ
+        import speech_recognition as sr
+        import io
         
+        # ઓડિયો બાઈટ્સને ઓડિયો ફાઈલમાં રૂપાંતરિત કરવું
+        audio_data = io.BytesIO(audio['bytes'])
+        r = sr.Recognizer()
+        
+        user_question = ""
+        try:
+            with sr.AudioFile(audio_data) as source:
+                recorded_audio = r.record(source)
+                # ગૂગલ સ્પીચ દ્વારા ગુજરાતી અવાજનું લખાણમાં રૂપાંતર
+                user_question = r.recognize_google(recorded_audio, language="gu-IN")
+                st.write(f"🗣️ તમે પૂછ્યું: *\"{user_question}\"*")
+        except:
+            user_question = "ટ્રેન્ડ અને પ્રાઈઝ" # જો અવાજ ક્લિયર ન હોય તો ડિફોલ્ટ
+            st.warning("⚠️ અવાજ બરાબર ઓળખાયો નથી, ડિફોલ્ટ માર્કેટ એનાલિસિસ લોડ થાય છે.")
+
+        # ૨. સ્માર્ટ AI બ્રેઈન લોજિક (કીવર્ડ આધારિત જવાબો)
+        ai_response_text = ""
+        q_low = user_question.lower()
+        
+        # સવાલના આધારે ડાયનેમિક જવાબો નક્કી કરવા
+        if "ટ્રેન્ડ" in q_low or "માર્કેટ" in q_low or "trend" in q_low:
+            ai_response_text = f"અત્યારે નિફ્ટી ૫૦ નો મુખ્ય ટ્રેન્ડ {trend_status} છે. EMA અને RSI ના સંકેતો મુજબ માર્કેટ અત્યારે વોલેટાઈલ હોઈ શકે છે."
+        elif "પ્રાઈઝ" in q_low or "ભાવ" in q_low or "price" in q_low:
+            ai_response_text = f"નિફ્ટી ૫૦ ની લાઈવ સ્પોટ કિંમત અત્યારે ₹{current_price:.2f} પર ચાલી રહી છે, જે આગલા બંધથી લગભગ {price_change:.2f} પોઈન્ટ બદલાઈ છે."
+        elif "સ્ટોપલોસ" in q_low or "લોટ" in q_low or "sl" in q_low:
+            ai_response_text = f"તમારી કેપિટલ ₹{capital} મુજબ, સિસ્ટમ અત્યારે {dynamic_sl} પોઈન્ટનો સ્ટોપલોસ અને ટાર્ગેટ ₹{dynamic_target} સૂચવે છે."
+        elif "લાયસન્સ" in q_low or "યુઝર" in q_low:
+            ai_response_text = f"તમે અત્યારે લાયસન્સ યુઝર {st.session_state['current_user']} તરીકે લોગીન છો. એડમિન પેનલ સાઇડબારમાં ઉપલબ્ધ છે."
+        else:
+            # કોઈપણ જનરલ ટ્રેડિંગના સવાલ માટે સ્માર્ટ જનરલ જવાબ
+            ai_response_text = f"ડિશંતભાઈ, ટ્રેડિંગ વ્યુ ચાર્ટ પર અત્યારે પ્રાઈઝ એક્શન નવો બ્રેકઆઉટ બનાવી રહ્યું છે. નિફ્ટી અત્યારે ₹{current_price:.2f} પર છે અને એકંદર માર્કેટ સેન્ટિમેન્ટ {trend_status} હોવાથી સાવચેતીપૂર્વક સ્ટોપલોસ સાથે જ ટ્રેડ લેવો હિતાવહ છે."
+
         st.success(f"🤖 DIAGNA AI જવાબ: {ai_response_text}")
         
-        # ગુજરાતીમાં અવાજ (Voice) જનરેટ કરવાની પ્રોસેસ
+        # ૩. ગુજરાતીમાં અવાજ (Voice) જનરેટ કરવાની પ્રોસેસ
         tts = gTTS(text=ai_response_text, lang='gu', slow=False)
         tts.save("response.mp3")
         
@@ -370,8 +403,4 @@ with right_panel:
             audio_html = f'<audio src="data:audio/mp3;base64,{audio_base64}" autoplay="autoplay">'
             st.markdown(audio_html, unsafe_allow_html=True)
         
-
-    
-
-            
-    
+        
