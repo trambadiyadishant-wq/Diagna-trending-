@@ -246,4 +246,5 @@ with right_panel:
         st.markdown(f"• Premium Profit Target: ₹{opt_target_price:.2f}", unsafe_allow_html=True)
         st.write(f"• Allocation Strategy: {calculated_lots} Lots ({final_qty} Qty)")
         if "15:00" <= current_time_str <= "15:30":
-        st.write("")st.markdown("""⚠️ AUTO SQUARE-OFF ALERT: Square off your open options positions before 15:15 to avoid broker penalty charges!""", unsafe_allow_html=True)
+            st.write("")
+            st.markdown("""⚠️ AUTO SQUARE-OFF ALERT: Square off your open options positions before 15:15 to avoid broker penalty charges!""", unsafe_allow_html=True)
