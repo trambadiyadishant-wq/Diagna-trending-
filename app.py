@@ -325,5 +325,24 @@ with right_panel:
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown(f"""
         <div style='background:#131722; padding:15px; border-radius:10px; border:1px solid #2A2E39;'>
+        <br><h3 style='color: #E2E8F0; font-size:18px;'>📈 Nifty 50 Real-Time Chart Canvas</h3>
+    <div class="tradingview-widget-container" style="height:350px;">
+      <div id="tradingview_nifty" style="height:350px;"></div>
+      <script type="text/javascript" src="https://tradingview.com"></script>
+      <script type="text/javascript">
+      new TradingView.widget({
+        "autosize": true, "symbol": "NSE:NIFTY", "interval": "15",
+        "timezone": "Asia/Kolkata", "theme": "dark", "style": "1",
+        "locale": "en", "toolbar_bg": "#131722", "enable_publishing": false,
+        "hide_side_toolbar": false, "allow_symbol_change": true,
+        "container_id": "tradingview_nifty"
+      });
+      </script>
+    </div>
+    """ , unsafe_allow_html=True)
+        
+
+    
+
             
     
