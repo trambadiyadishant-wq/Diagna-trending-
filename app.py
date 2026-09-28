@@ -10,7 +10,7 @@ st.set_page_config(page_title="AI Nifty Options Pro Engine", layout="wide")
 # Persistent Cloud database simulation using Streamlit's state architecture
 if "user_db" not in st.session_state:
     st.session_state["user_db"] = {
-        "admin": "mysecretpassword123",  # Your permanent master Admin Key
+        "dishant":"dishant911", # Your permanent master Admin Key
         "client1": "paiduser789"          # Sample client credential
     }
 
@@ -241,4 +241,5 @@ with right_panel:
         nifty_lot_size = 75
         raw_qty = allowed_loss / premium_sl_points
 calculated_lots = int(raw_qty / nifty_lot_size)
-final_qty = calculated_lots * nifty_lot_sizest.write("")st.markdown("### 📋 Live Option Trade Setup")st.write(f"• Contract Target: {option_strike}")st.markdown(f"• Premium Stop-Loss (SL): ₹{opt_sl_price:.2f}", unsafe_allow_html=True)st.markdown(f"• Premium Profit Target: ₹{opt_target_price:.2f}", unsafe_allow_html=True)st.write(f"• Allocation Strategy: {calculated_lots} Lots ({final_qty} Qty)")# Auto square-off warningif "15:00" <= current_time_str <= "15:30":st.write("")st.markdown("""⚠️ AUTO SQUARE-OFF ALERT: Square off your open options positions before 15:15 to avoid broker penalty charges!""", unsafe_allow_html=True)
+final_qty = calculated_lots * nifty_lot_sizest.write("")st.markdown("### 📋 Live Option Trade Setup")
+st.write(f"• Contract Target: {option_strike}")st.markdown(f"• Premium Stop-Loss (SL): ₹{opt_sl_price:.2f}", unsafe_allow_html=True)st.markdown(f"• Premium Profit Target: ₹{opt_target_price:.2f}", unsafe_allow_html=True)st.write(f"• Allocation Strategy: {calculated_lots} Lots ({final_qty} Qty)")# Auto square-off warningif "15:00" <= current_time_str <= "15:30":st.write("")st.markdown("""⚠️ AUTO SQUARE-OFF ALERT: Square off your open options positions before 15:15 to avoid broker penalty charges!""", unsafe_allow_html=True)
