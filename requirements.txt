@@ -4,4 +4,4 @@ pandas
 textblob
 gTTS
 streamlit-mic-recorder
-SpeechRecognition
+openai
