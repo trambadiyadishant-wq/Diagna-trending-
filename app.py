@@ -342,63 +342,73 @@ with right_panel:
       </script>
     </div>
     """ , unsafe_allow_html=True)
+        # --- 🎙️ DIAGNA AI INTEGRATED WITH OPENAI CHATGPT (GUJARATI) ---
+    st.markdown("<br><h3 style='color: #00F0FF; font-size:18px;'>🎙️ DIAGNA AI વોઈસ આસિસ્ટન્ટ (OpenAI)</h3>", unsafe_allow_html=True)
+    st.write("સવાલ પૂછવા માટે નીચેના માઈક બટન પર ક્લિક કરીને બોલો...")
+
+    from streamlit_mic_recorder import mic_recorder
+    from gtts import gTTS
+    import base64
+    from openai import OpenAI
+
+    # 🔑 તમારી કોપી કરેલી OpenAI API Key અહીં 'XYZ' ની જગ્યાએ પેસ્ટ કરો
+    openai_api_key = "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" 
+
+    # એપ્લિકેશનની અંદર જ લાઈવ માઈક બટન
+    audio = mic_recorder(start_prompt="🎤 બોલવાનું શરૂ કરો", stop_prompt="🛑 સ્ટોપ કરો", key='diagna_openai_mic')
+
+    if audio and openai_api_key != "XYZ":
+        st.info("🔄 DIAGNA AI તમારા અવાજ અને સવાલનું એનાલિસિસ કરી રહ્યું છે...")
+        
+        import io
+        import speech_recognition as sr
+        
+        # ૧. સ્પીચ-ટુ-ટેક્સ્ટ (અવાજમાંથી લખાણ બનાવવું)
+        audio_data = io.BytesIO(audio['bytes'])
+        r = sr.Recognizer()
+        user_question = ""
+        
+        try:
+            with sr.AudioFile(audio_data) as source:
+                recorded_audio = r.record(source)
+                user_question = r.recognize_google(recorded_audio, language="gu-IN")
+                st.write(f"🗣️ તમે પૂછ્યું: *\"{user_question}\"*")
+        except:
+            st.warning("⚠️ અવાજ ઓળખવામાં તકલીફ થઈ. કૃપા કરીને માઈક નજીક રાખી ફરી બોલો.")
+            st.stop()
+
+        if user_question:
+            # ૨. OpenAI કનેક્શન અને સ્માર્ટ ડાયનેમિક જવાબ
+            client = OpenAI(api_key=openai_api_key)
+            
+            # માર્કેટના લાઈવ ડેટાનો રેફરન્સ AI ને આપવો
+            market_context = f"Current Nifty 50 Price: {current_price:.2f}, Price Change: {price_change:.2f}, Trend Status: {trend_status}."
+            
+            system_prompt = f"તમે એક પ્રોફેશનલ શેરબજાર એક્સપર્ટ AI આસિસ્ટન્ટ છો જેનું નામ DIAGNA છે. આ લાઈવ માર્કેટ ડેટા ધ્યાનમાં રાખો: {market_context}. યુઝર ડિશંતભાઈ છે. તમારે યુઝરના શેરબજાર અને ટ્રેડિંગ સંબંધિત સવાલોના શોર્ટ, સ્માર્ટ અને એકદમ સચોટ જવાબો શુદ્ધ અને ફ્રેન્ડલી ગુજરાતી ભાષામાં જ આપવાના છે."
+            
+            try:
+                response = client.chat.completions.create(
+                    model="gpt-4o-mini", # ફાસ્ટ અને ઇકોનોમિકલ મોડલ
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_question}
+                    ]
+                )
+                ai_response_text = response.choices[0].message.content
+            except:
+                ai_response_text = "નમસ્તે ડિશંતભાઈ, ઓપન એઆઈ સર્વર કનેક્શનમાં કોઈ ટેકનિકલ સમસ્યા આવી છે. કૃપા કરીને થોડીવાર પછી પ્રયત્ન કરો."
+
+            st.success(f"🤖 DIAGNA AI કોમ્પ્લેક્સ જવાબ: {ai_response_text}")
+            
+            # ૩. ગુજરાતીમાં અવાજ (Voice) જનરેટ કરવાની પ્રોસેસ
+            tts = gTTS(text=ai_response_text, lang='gu', slow=False)
+            tts.save("response.mp3")
+            
+            # ઓટોમેટિક ઓડિયો પ્લે કરવાનો જુગાડ
+            with open("response.mp3", "rb") as f:
+                audio_bytes = f.read()
+                audio_base64 = base64.b64encode(audio_bytes).decode()
+                audio_html = f'<audio src="data:audio/mp3;base64,{audio_base64}" autoplay="autoplay">'
+                st.markdown(audio_html, unsafe_allow_html=True)
         # --- ⚡ એડવાન્સ DIAGNA MULTI-KEYWORD & COMPLEX VOICE PROCESSOR ---
-    st.markdown("<br><h3 style='color: #00F0FF; font-size:18px;'>🎙️ DIAGNA AI સ્માર્ટ આસિસ્ટન્ટ (મલ્ટિપલ એનાલિસિસ)</h3>", unsafe_allow_html=True)
     
-    user_question = st.text_input("અહીં સવાલ લખો અથવા કીબોર્ડનું માઈક દબાવીને બોલો:", placeholder="દા.ત. નિફ્ટીનો ટ્રેન્ડ શું છે અને મારો સ્ટોપલોસ ક્યાં રાખવો?")
-
-    if user_question:
-        st.info("⚡ DIAGNA AI જટિલ સવાલનું એનાલિસિસ કરી રહ્યું છે...")
-        
-        q_low = user_question.lower()
-        response_segments = []
-        
-        # ૧. મલ્ટિપલ કીવર્ડ એનાલિસિસ સેગમેન્ટ્સ
-        if "ટ્રેન્ડ" in q_low or "માર્કેટ" in q_low or "trend" in q_low:
-            response_segments.append(f"નિફ્ટી ૫૦ નો મુખ્ય ટ્રેન્ડ અત્યારે {trend_status} છે.")
-            
-        if "પ્રાઈઝ" in q_low or "ભાવ" in q_low or "price" in q_low or "કિંમત" in q_low:
-            response_segments.append(f"નિફ્ટીની લાઈવ સ્પોટ કિંમત ₹{current_price:.2f} પર ટ્રેડ થઈ રહી છે જે આગલા બંધથી {price_change:.2f} પોઈન્ટ બદલાઈ છે.")
-            
-        if "સ્ટોપલોસ" in q_low or "ટાર્ગેટ" in q_low or "sl" in q_low:
-            response_segments.append(f"આજના માર્કેટની વોલેટિલિટી મુજબ સેફ સ્ટોપલોસ {dynamic_sl} પોઈન્ટ અને પ્રોફિટ ટાર્ગેટ ₹{dynamic_target} રાખવો યોગ્ય રહેશે.")
-            
-        if "લોટ" in q_low or "ક્વોન્ટિટી" in q_low or "lot" in q_low or "માત્રા" in q_low:
-            # લાઈવ કેપિટલના આધારે લોટ સાઈઝનું કેલ્ક્યુલેશન
-            nifty_lot_size = 75
-            raw_qty = (capital * (risk_pct / 100.0)) / premium_sl_points
-            calculated_lots = int(raw_qty / nifty_lot_size)
-            response_segments.append(f"તમારી ₹{capital} કેપિટલ અને {risk_pct}% રિસ્ક પ્રોફાઈલ પ્રમાણે તમારે વધુમાં વધુ {calculated_lots} લોટમાં કામ કરવું જોઈએ.")
-            
-        if "લાયસન્સ" in q_low or "યુઝર" in q_low:
-            response_segments.append(f"તમે અત્યારે એક્ટિવ લાયસન્સ યુઝર {st.session_state['current_user']} તરીકે લોગીન છો.")
-
-        # ૨. જો કોઈ જનરલ કે અતિ જટિલ સવાલ પૂછવામાં આવે તો (Fall-back Intelligent Response)
-        if not response_segments:
-            ai_response_text = f"ડિશંતભાઈ, તમે પૂછેલો પ્રશ્ન ટ્રેડિંગ વ્યુ ચાર્ટ પર અત્યારે પ્રાઈઝ એક્શન અને કેન્ડલસ્ટિક પેટર્ન નવો સપોર્ટ બનાવી રહ્યું છે તે દર્શાવે છે. નિફ્ટી અત્યારે ₹{current_price:.2f} પર હોવાથી અને એકંદર માર્કેટ સેન્ટિメント {trend_status} હોવાથી ઉતાવળ કર્યા વગર સિસ્ટમના પ્રીમિયમ કેલ્ક્યુલેટર મુજબ જ સ્ટોપલોસ સાથે ટ્રેડ લેવો હિતાવહ છે."
-        else:
-            # બધા જ જવાબોને ભેગા કરીને એક મોટો પ્રોફેશનલ કમ્પ્લીટ આન્સર બનાવવો
-            ai_response_text = f"નમસ્તે ડિશંતભાઈ! મેં તમારા જટિલ સવાલનું વિશ્લેષણ કર્યું છે. " + " ".join(response_segments) + " મની મેનેજમેન્ટનું ખાસ ધ્યાન રાખજો."
-
-        st.success(f"🤖 DIAGNA AI કોમ્પ્લેક્સ જવાબ: {ai_response_text}")
-        
-        # ૩. ગુજરાતીમાં અવાજ (Voice) જનરેટ કરવાની પ્રોસેસ
-        tts = gTTS(text=ai_response_text, lang='gu', slow=False)
-        tts.save("response.mp3")
-        
-        # ઓટોમેટિક ઓડિયો પ્લે કરવાનો જુગાડ
-        with open("response.mp3", "rb") as f:
-            audio_bytes = f.read()
-            audio_base64 = base64.b64encode(audio_bytes).decode()
-            audio_html = f'<audio src="data:audio/mp3;base64,{audio_base64}" autoplay="autoplay">'
-            st.markdown(audio_html, unsafe_allow_html=True)
-        # --- 🎙️ DIAGNA GUJARATI VOICE AI ASSISTANT ---
-            
-        # ઓટોમેટિક ઓડિયો પ્લે કરવાનો જુગાડ
-        with open("response.mp3", "rb") as f:
-            audio_bytes = f.read()
-            audio_base64 = base64.b64encode(audio_bytes).decode()
-            audio_html = f'<audio src="data:audio/mp3;base64,{audio_base64}" autoplay="autoplay">'
-            st.markdown(audio_html, unsafe_allow_html=True)
-        
-        
