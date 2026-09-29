@@ -325,7 +325,7 @@ with right_panel:
         final_qty = calculated_lots * nifty_lot_size
         # --- 📊 LIVE TRADINGVIEW CHART CANVAS INTEGRATION (ERROR-FREE) ---
     st.markdown("<br><h3 style='color: #E2E8F0; font-size:18px;'>📈 Nifty 50 Real-Time Chart Canvas</h3>", unsafe_allow_html=True)
-    chart_url = "https://tradingview.com"
+    chart_url = "https://tvwidget.com"
     st.components.v1.iframe(chart_url, height=380, scrolling=False)
 
         
