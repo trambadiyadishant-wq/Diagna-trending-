@@ -323,16 +323,16 @@ with right_panel:
         raw_qty = allowed_loss / premium_sl_points
         calculated_lots = int(raw_qty / nifty_lot_size)
         final_qty = calculated_lots * nifty_lot_size
-        # --- 📊 LIVE TRADINGVIEW CHART CANVAS INTEGRATION (ERROR-FREE) ---
-    # --- 📊 LIVE TRADINGVIEW CHART CANVAS INTEGRATION (100% FIXED) ---
+        # --- 📊 LIVE CHART CANVAS INTEGRATION (100% FIXED WORKING) ---
     st.markdown("<br><h3 style='color: #E2E8F0; font-size:18px;'>📈 Nifty 50 Real-Time Chart Canvas</h3>", unsafe_allow_html=True)
     
-    tradingview_widget = """
-    <div class="tradingview-widget-container" style="height:380px;">
-      <iframe src="https://tradingview.com" width="100%" height="380" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
-    </div>
+    investing_widget = """
+    <iframe src="https://investing.com" width="100%" height="380" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" scrolling="no"></iframe>
     """
-    st.components.v1.html(tradingview_widget, height=390)
+    st.components.v1.html(investing_widget, height=390)
+        # --- 📊 LIVE TRADINGVIEW CHART CANVAS INTEGRATION (ERROR-FREE) ---
+    # --- 📊 LIVE TRADINGVIEW CHART CANVAS INTEGRATION (100% FIXED) ---
+    
 
         
         # --- 🎙️ DIAGNA AI INTEGRATED WITH OPENAI CHATGPT (GUJARATI) ---
