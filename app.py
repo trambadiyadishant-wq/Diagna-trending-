@@ -324,9 +324,15 @@ with right_panel:
         calculated_lots = int(raw_qty / nifty_lot_size)
         final_qty = calculated_lots * nifty_lot_size
         # --- 📊 LIVE TRADINGVIEW CHART CANVAS INTEGRATION (ERROR-FREE) ---
+    # --- 📊 LIVE TRADINGVIEW CHART CANVAS INTEGRATION (100% FIXED) ---
     st.markdown("<br><h3 style='color: #E2E8F0; font-size:18px;'>📈 Nifty 50 Real-Time Chart Canvas</h3>", unsafe_allow_html=True)
-    chart_url = "https://tvwidget.com"
-    st.components.v1.iframe(chart_url, height=380, scrolling=False)
+    
+    tradingview_widget = """
+    <div class="tradingview-widget-container" style="height:380px;">
+      <iframe src="https://tradingview.com" width="100%" height="380" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
+    </div>
+    """
+    st.components.v1.html(tradingview_widget, height=390)
 
         
         # --- 🎙️ DIAGNA AI INTEGRATED WITH OPENAI CHATGPT (GUJARATI) ---
