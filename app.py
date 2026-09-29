@@ -327,7 +327,7 @@ with right_panel:
     st.markdown("<br><h3 style='color: #E2E8F0; font-size:18px;'>📈 Nifty 50 Real-Time Chart Canvas</h3>", unsafe_allow_html=True)
     
     investing_widget = """
-    <iframe src="https://investing.com" width="100%" height="380" frameborder="0" allowtransparency="true" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+    <iframe src="https://investing.com" width="100%" height="380" frameborder="0" allowtransparency="true" scrolling="no"></iframe>
     """
     st.components.v1.html(investing_widget, height=390)
         # --- 📊 LIVE TRADINGVIEW CHART CANVAS INTEGRATION (ERROR-FREE) ---
