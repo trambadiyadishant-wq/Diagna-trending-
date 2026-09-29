@@ -146,8 +146,8 @@ nifty_ticker, df = fetch_market_data()
 
 now = datetime.datetime.now()
 current_time_str = now.strftime("%H:%M")
-market_open_safe = "09:45"
-market_close_safe = "15:15"
+market_open_safe = "00:00"
+market_close_safe = "23:59"
 
 if not df.empty and len(df) >= 21:
     if isinstance(df.columns, pd.MultiIndex):
