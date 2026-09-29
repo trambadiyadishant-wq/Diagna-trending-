@@ -323,25 +323,12 @@ with right_panel:
         raw_qty = allowed_loss / premium_sl_points
         calculated_lots = int(raw_qty / nifty_lot_size)
         final_qty = calculated_lots * nifty_lot_size
+        # --- 📊 LIVE TRADINGVIEW CHART CANVAS INTEGRATION (ERROR-FREE) ---
+    st.markdown("<br><h3 style='color: #E2E8F0; font-size:18px;'>📈 Nifty 50 Real-Time Chart Canvas</h3>", unsafe_allow_html=True)
+    chart_url = "https://tradingview.com"
+    st.components.v1.iframe(chart_url, height=380, scrolling=False)
 
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.markdown(f"""
-        <div style='background:#131722; padding:15px; border-radius:10px; border:1px solid #2A2E39;'>
-        <br><h3 style='color: #E2E8F0; font-size:18px;'>📈 Nifty 50 Real-Time Chart Canvas</h3>
-    <div class="tradingview-widget-container" style="height:350px;">
-      <div id="tradingview_nifty" style="height:350px;"></div>
-      <script type="text/javascript" src="https://tradingview.com"></script>
-      <script type="text/javascript">
-      new TradingView.widget({
-        "autosize": true, "symbol": "NSE:NIFTY", "interval": "15",
-        "timezone": "Asia/Kolkata", "theme": "dark", "style": "1",
-        "locale": "en", "toolbar_bg": "#131722", "enable_publishing": false,
-        "hide_side_toolbar": false, "allow_symbol_change": true,
-        "container_id": "tradingview_nifty"
-      });
-      </script>
-    </div>
-    """ , unsafe_allow_html=True)
+        
         # --- 🎙️ DIAGNA AI INTEGRATED WITH OPENAI CHATGPT (GUJARATI) ---
     st.markdown("<br><h3 style='color: #00F0FF; font-size:18px;'>🎙️ DIAGNA AI વોઈસ આસિસ્ટન્ટ (OpenAI)</h3>", unsafe_allow_html=True)
     st.write("સવાલ પૂછવા માટે નીચેના માઈક બટન પર ક્લિક કરીને બોલો...")
